@@ -1,0 +1,92 @@
+﻿
+@using System.Web.UI.WebControls
+@using UniversityManagementSystemMVC.Models
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>University Management System</title>
+  <meta name="description" content="Free Bootstrap Theme by BootstrapMade.com">
+  <meta name="keywords" content="free website templates, free bootstrap themes, free template, free bootstrap, free website template">
+
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans|Candal|Alegreya+Sans">
+  <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/mytemplate/")css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/mytemplate/")css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/mytemplate/")css/imagehover.min.css">
+  <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/mytemplate/")css/style.css">
+  
+</head>
+
+<body>
+  <!--Navigation bar-->
+  <nav class="style navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">University<span>Management</span></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="@Url.Action("Home", "Home")">Home</a></li>
+              <div class="dropdown">
+                  
+                      <li class="dropbtn">Activities</li>
+                      <div class="dropdown-content">
+                          <a href="@Url.Action("SaveDepartment", "Department")" />Save Department</a>
+                          <a href="@Url.Action("ShowAllDepartment", "Department")" />Show All Department</a>
+                          <a href="@Url.Action("SaveCourse", "Course")" /> SaveCourse </a>
+                          <a href="@Url.Action("SaveTeacher", "Teacher")" />SaveTeacher</a>
+                          <a href="@Url.Action("AssignToTeacher", "CourseAssignToTeacher")" />Assign To Teacher</a>
+                          <a href="@Url.Action("ViewCourseStatics", "CourseStatics")" />View Course Statics</a>
+                          <a href="@Url.Action("RegisterStudent", "Student")" />RegisterStudent</a>
+                          <a href="@Url.Action("Allocate", "AllocateClassroom")" />Allocate</a>
+                          <a href="@Url.Action("ViewClassroom", "Schedule")" />ViewClassroom</a>
+                          <a href="@Url.Action("EnrollCourse", "Enroll")" />EnrollCourse</a>
+                          <a href="@Url.Action("SaveResult", "Student")" />SaveResult</a>
+                          <a href="@Url.Action("ViewResult", "Result")" />ViewResult</a>
+                          <a href="@Url.Action("Unassign", "UnassignCourse")" />Unassign</a>
+                          <a href="@Url.Action("UnAllocate", "UnAllocateRoom")" />UnAllocate</a>
+                          <a href=@Url.Action("Home", "Home")/>Log Out</a>
+
+                      </div>
+                      
+              </div>         
+                     
+                  </ul>
+              </div>
+</div>
+  </nav>
+  <!--/ Navigation bar-->
+    <!--Home-->
+    <!--Banner-->
+    <section id="home" class="section-padding">
+        <div class="banner">
+            <div class="bg-color">
+                <div class="container">
+                    <div class="row">
+                        <div class="banner-text text-center">
+                            <div class="text-border">
+                                <h2 class="text-dec">BUBT</h2>
+                            </div>
+                            <div class="intro-para text-center quote">
+                                <p class="big-text">A POWERHOUSE OF ACADEMIC EXCELLENCE</p>
+                                <p class="small-text">It has established a formidable reputation since its inception in 2003. The university has risen to one of the top ranking private universities in Bangladesh.</p>
+                                <!--<a href="#footer" class="btn get-quote">GET A QUOTE</a>-->
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--end home-->
+    
+</body>
+</html>

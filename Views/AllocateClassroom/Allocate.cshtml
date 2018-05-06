@@ -1,0 +1,126 @@
+﻿@using UniversityManagementSystemMVC.Models
+@model AllocateClassroom
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Department> departments = ViewBag.aldepartments;
+    List<Room> rooms = ViewBag.allrooms;
+    List<sevendays> days = ViewBag.sevendays;
+    string msg = ViewBag.message;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AllocateClassrooms</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                @Html.Label("Allocate Classrooms", new { @style = "font-size:x-large;font-weight: bold" })
+                            </legend>
+                            <table align="center">
+                                <tr>
+                                    <td>@Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(d => d.DepartmentId, new SelectList(departments, "Id", "Name"), "-----Select Department-----", new { @style = "width: 173px", id = "departmentId" })<br />
+                                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Course", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(d => d.CourseId, new SelectList(string.Empty, "Id", "Name"), new { @style = "width: 173px", id = "courseid" })<br />
+                                        @Html.ValidationMessageFor(model => model.CourseId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Room No", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(d => d.RoomId, new SelectList(rooms, "Id", "RoomNo"), "-----Select Room-----", new { @style = "width: 173px" })<br />
+                                        @Html.ValidationMessageFor(model => model.RoomId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Day", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(d => d.DayId, new SelectList(days, "Id", "Days"), "-----Select Day-----", new { @style = "width: 173px" })<br />
+                                        @Html.ValidationMessageFor(model => model.DayId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("From", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.From, new { type = "time" })<br />
+                                        @Html.ValidationMessageFor(model => model.From, "", new { @style = "color:red" })
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("To", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.To, new { type = "time" })<br />
+                                        @Html.ValidationMessageFor(model => model.To, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="left">
+                                        <input type="button" value="Home" align="right" onclick="window.location.href = '@Url.Action("Home", "Home")'" />
+                                        <input type="submit" value="Allocate" />
+                                    </td>
+
+                                </tr>
+                            </table>
+                            @msg
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    
+    <script>
+        $(document)
+            .ready(function () {
+                $("#departmentId")
+                    .change(function () {
+                        var deptId = $("#departmentId").val();
+                        
+                        $("#courseid").empty();
+                        var json = {
+                            departmentId: deptId
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetCourseByDepartmentId", "AllocateClassroom")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+                        //alert(data);
+                        $("#courseid").append('<option>' + "-----Select Course-----" + '</option>');
+                        $.each(data,
+                            function (key, value) {
+                                //alert(key);
+                                $("#courseid")
+                                    .append('<option value=' + value.Id + '>' + value.Name + '</option>');
+                            });
+                    }
+                });
+            });
+        });
+
+
+    </script>
+</body>
+</html>

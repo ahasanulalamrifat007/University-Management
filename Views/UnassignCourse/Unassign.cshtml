@@ -1,0 +1,79 @@
+﻿@using System.Web.Script.Services
+@using System.Web.UI.WebControls
+
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Unassign</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                @Html.Label("Unassign All Courses", new { @style = "font-size:x-large;font-weight: bold" })
+                            </legend>
+
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input type="button" data-toggle="modal" data-target="#myModal" value="Unassign Courses" style="font-size: 25px; height: 60px; width: 300px; margin-left: 180px; margin-top: 50px; margin-bottom: 50px;float:center"  />
+                                    <td>
+
+                                </tr>
+                            </table>
+
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Alert!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to unassign all courses?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="x1">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<script>
+    $("#x1").click(function() {
+            $.ajax({
+                url: '@Url.Action("UnassignAllCourses", "UnassignCourse")',
+                contentType: "application/json; charset=utf-8",
+            });
+        alert('Unassign Successfull');
+    });
+</script>
+    </body>
+</html>

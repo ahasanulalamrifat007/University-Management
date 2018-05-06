@@ -1,0 +1,136 @@
+﻿@using UniversityManagementSystemMVC.Models
+@model Teacher
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Designation> designations = ViewBag.designations;
+    List<Department> departments = ViewBag.departments;
+    string msg = ViewBag.message;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SaveTeacher</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+
+                        <fieldset>
+                            <legend>
+                                @Html.Label("Save Teacher", new { @style = "font-size:x-large;font-weight: bold" })
+                            </legend>
+                            <table align="center">
+                                <tr>
+                                    <td>
+                                        @Html.Label("Name", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.Name)<br />
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Html.Label("Address", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(m => m.Address)<br />
+                                        @Html.ValidationMessageFor(model => model.Address, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Html.Label("Email", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.Email, new { Type = "email" })<br />
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Contact No", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.ContactNo)<br />
+                                        @Html.ValidationMessageFor(model => model.ContactNo, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Html.Label("Designation", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.DesignationId, new SelectList(designations, "Id", "Name"), "-----Select-----")<br />
+                                        @Html.ValidationMessageFor(model => model.DesignationId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.DepartmentId, new SelectList(departments, "Id", "Name"), "----------Select----------")<br />
+                                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Html.Label("Credit to be Taken", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.CreditTobeTaken)<br />
+                                        @Html.ValidationMessageFor(model => model.CreditTobeTaken, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="right">
+                                        <input type="button" value="Home" onclick="window.location.href = '@Url.Action("Home", "Home")'" />
+                                        <input type="submit" value="Save" />
+                                    </td>
+                                </tr>
+
+                            </table>
+                            @msg
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    @*<script>
+        $("#saveTeacher")
+            .validate({
+                rules: {
+                    name: "required",
+                    address: "required",
+                    contactNo: "required",
+                    DesignationId: "required",
+                    DepartmentId: "required",
+                    credit: {
+                        min:0
+                    }
+                }
+            });
+
+    </script>*@
+
+
+</body>
+
+</html>

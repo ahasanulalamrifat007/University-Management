@@ -1,0 +1,123 @@
+﻿@using UniversityManagementSystemMVC.Models
+@model Enroll
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Student> students = ViewBag.studentlist;
+    string msg = ViewBag.message;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EnrollInACourse</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                @Html.Label("Enroll In A Corse", new { @style = "font-size:x-large;font-weight: bold" })
+                            </legend>
+                            <table align="center">
+                                <tr>
+                                    <td>@Html.Label("Student Reg No", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(s => s.StudentRegNo, new SelectList(students, "RegistrarionNo", "RegistrarionNo"), "---Select Registraton No---", new { @style = "width: 173px", id = "studentid" })<br />
+                                        @Html.ValidationMessageFor(model => model.StudentRegNo, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Name", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(r => r.StudentName, new { id = "nameid", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Email", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(r => r.StudentEmail, new { id = "emailid", @readonly = true })</td>
+
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(r => r.StudentDepartmentName, new { id = "dname", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label(" Select Course", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(s => s.CourseId, new SelectList(string.Empty, "CourseId", "CourseName"), "----Select----", new { @style = "width: 173px", id = "courseid" })<br />
+                                        @Html.ValidationMessageFor(model => model.CourseId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Date", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.TextBoxFor(x => x.Date, "{0:yyyy-MM-dd}", new { @type = "date", @style = "width: 168px" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="right">
+                                        <input type="button" value="Home" onclick="window.location.href = '@Url.Action("Home", "Home")'" />
+                                        <input type="submit" value="Enroll" id="submitID" />
+                                    </td>
+                                </tr>
+                            </table>
+                            @msg
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script>
+        $(document)
+            .ready(function() {
+
+                $("#studentid")
+                    .change(function () {
+                        var stdid = $("#studentid").val();
+                        var json = { RegNo: stdid };;
+                        $("#courseid").empty();
+                        $("#courseid").val("");
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetStudentInfoByRegNo", "Enroll")',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(json),
+                            success: function(data) {
+                                $("#nameid").val(data.Name);
+                                $("#emailid").val(data.Email);
+                                $("#dname").val(data.DepartmentName);
+                            }
+                        });
+                        
+                        $.ajax({
+
+                            type: "POST",
+                            url: '@Url.Action("GetCoursesListByRegNo", "Enroll")',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                //alert(data);
+                                $.each(data,
+                                    function (key, value) {
+                                        //alert(key);
+                                        $("#courseid").append('<option value=' + value.CourseId + '>' + value.CourseCode + '</option>');
+
+                                    });
+                            }
+                        });
+                    });
+
+            });
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+﻿@using System.Web.UI.WebControls
+@using UniversityManagementSystemMVC.Models
+@model Department
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Department> alist = ViewBag.alldepartment;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View All Department</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        <table  width ="95%" align="center" style="margin-top: 150px">
+            <tr>
+                <td>
+                    <fieldset>
+
+                        <legend>
+                            <h2>View All Departments</h2>
+                        </legend>
+                        <form method="post">
+                            <table align="center" border="1px" width="90%">
+                                <tr>
+                                    <th>@Html.Label("Code ")</th>
+                                    <th>@Html.Label("Name ")</th>
+                                </tr>
+                                @foreach (var list in alist)
+                                {
+                                    <tr>
+                                        <td>
+                                            @list.Code
+                                        </td>
+                                        <td>@list.Name</td>
+                                    </tr>
+                                }
+                            </table>
+
+                        </form>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

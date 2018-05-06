@@ -1,0 +1,101 @@
+﻿@using UniversityManagementSystemMVC.Models
+@model Course
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Department> departments = ViewBag.departments;
+    List<Semester> semesters = ViewBag.semesters;
+    string msg = ViewBag.message;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SaveCourse</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                @Html.Label("Save Course", new { @style = "font-size:x-large;font-weight: bold" })
+                            </legend>
+                            <table width="30%" align="center">
+                                <tr>
+                                    <td>
+                                        @Html.Label("Code", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.Code)<br />
+                                        @Html.ValidationMessageFor(model => model.Code, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Name", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.Name)<br />
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Credit", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.Credit)<br />
+                                        @Html.ValidationMessageFor(model => model.Credit, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Html.Label("Description", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(d => d.Description)<br />
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.DepartmentId, new SelectList(departments, "Id", "Name"), "Select-----") <br />
+                                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Semester", new { @style = "font-size:large;font-weight: bold" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.SemesterId, new SelectList(semesters, "Id", "Name"), "Select----")<br />
+                                        @Html.ValidationMessageFor(model => model.SemesterId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="right"><input type="button" value="Home" onclick="window.location.href = '@Url.Action("Home", "Home")'" /> <input type="submit" value="Save" /></td>
+                                </tr>
+                            </table>
+                            @msg
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

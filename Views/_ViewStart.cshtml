@@ -1,0 +1,17 @@
+﻿@using UniversityManagementSystemMVC.Models;
+
+@{
+    var user = (User)Session["CurrentUser"];
+    if (Session["CurrentUser"] == null)
+    {
+        Layout = "~/Views/Shared/LayoutDefault.cshtml";
+    }
+    else if(user.Role == "Admin")
+    {
+        Layout = "~/Views/Shared/_Layoutpage1.cshtml";
+    }
+    else if (user.Role == "User")
+    {
+        Layout = "~/Views/Shared/UserLayout.cshtml";
+    }
+}

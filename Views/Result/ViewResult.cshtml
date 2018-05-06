@@ -1,0 +1,124 @@
+﻿@using UniversityManagementSystemMVC.Models
+@model StudentViewResult
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Student> students = ViewBag.students;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StudentViewResult</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>@Html.Label("View Result", new { @style = "font-size:x-large;font-weight: bold" })</legend>
+                            <table align="center">
+                                <tr>
+                                    <td>@Html.Label("Student Reg No", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(s => s.RegistrationNo, new SelectList(students, "RegistrarionNo", "RegistrarionNo"), "---Select Registraton No---", new { @style = "width: 173px", id = "studentid" })<br />
+                                        @Html.ValidationMessageFor(model => model.RegistrationNo, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Name", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(a => a.Name, new { id = "studentname", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Email", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(a => a.Email, new { id = "studentEmail", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(a => a.DepartmentName, new { id = "departmentname", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="right">
+                                        <input type="submit" value="Make PDF" id="button" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table align="center" border="1px" width="100%">
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                </tr>
+                                <tbody id="contacts"></tbody>
+                            </table>
+
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+<script>
+    $(document)
+        .ready(function () {
+            $("#studentid")
+                    .change(function () {
+
+                        var thrid = $("#studentid").val();
+                        var json = {
+                            RegNo: thrid
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetStudentByRegNo", "Result")',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                $("#studentname").val(data.Name);
+                                $("#studentEmail").val(data.Email);
+                                $("#departmentname").val(data.DepartmentName);
+                            }
+                        });
+
+                        //for Table Value
+                        var g = 'Not Graded Yet';
+                    $.ajax({
+                        type: "POST",
+                        
+                            url: '@Url.Action("GetTableValue", "Result")',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+                                var row = "";
+                                $.each(data, function (index, item) {
+                                    if (item.Grade=='') {
+                                        row += "<tr>" +
+                                        "<td>" + item.CourseCode + "</td>" +
+                                        "<td>" + item.CourseName + "</td>" +
+                                        "<td>"+g+"</td>" +
+                                        "</tr>";
+                                    } else {
+                                    row+="<tr>" +
+                                        "<td>" + item.CourseCode + "</td>" +
+                                        "<td>" + item.CourseName + "</td>" +
+                                        "<td>" + item.Grade + "</td>" +
+                                        "</tr>";
+}
+                                });
+                                $("#contacts").html(row);    
+                            }
+                        });
+                });
+        });
+</script>
+</body>
+</html>

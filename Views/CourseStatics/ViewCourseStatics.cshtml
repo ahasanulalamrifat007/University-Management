@@ -1,0 +1,94 @@
+﻿@using System.Data.SqlClient
+@using UniversityManagementSystemMVC.Models
+@using UniversityManagementSystemMVC.Models.ViewModels
+@model CourseStatics
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Department> departments = ViewBag.departments;
+    List<CourseStatics> courseStaticses = ViewBag.clist;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewCourseStatics</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        <table width="95%" align="center" style="margin-top: 150px">
+            <tr>
+                <td>
+                    <fieldset>
+
+                        <legend>
+                            @Html.Label("View Course Statics", new { @style = "font-size:x-large;font-weight: bold" })
+                        </legend>
+                        <form method="post">
+                            <table align="center" style="margin-top: 30px">
+                                <tr>
+                                    <td>@Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.DepartmentId, new SelectList(departments, "Id", "Name"), "----------Select---------", new { onchange = "this.form.submit();", style = "width: 175px" })
+                                    </td>
+                                </tr>
+                            </table>
+                            <h2>
+                                <b>Course Information</b>
+                            </h2>
+
+                            <table align="center" border="1px" width="90%">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name/Title</th>
+                                    <th>Semester</th>
+                                    <th>Assign To</th>
+                                </tr>
+
+                                @if (courseStaticses == null)
+                                {
+                                    return;
+                                }
+                                else
+                                {
+                                    foreach (var alist in courseStaticses)
+                                    {
+                                        if (alist.TeacherName == "" || alist.Status == "False")
+                                        {
+                                            <tr>
+                                                <td>@alist.CourseCode</td>
+                                                <td>@alist.CourseName</td>
+                                                <td>@alist.SemesterName</td>
+                                                <td>Not Assigned Yet</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>@alist.CourseCode</td>
+                                                <td>@alist.CourseName</td>
+                                                <td>@alist.SemesterName</td>
+                                                <td>@alist.TeacherName</td>
+                                            </tr>
+                                        }
+                                    }
+
+                                }
+
+                            </table>
+                            <input type="button" value="Home" onclick="window.location.href = '@Url.Action("Home", "Home")'" style="float: right;margin-right: 40px" />
+
+                        </form>
+
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+
+
+
+    </div>
+</body>
+</html>

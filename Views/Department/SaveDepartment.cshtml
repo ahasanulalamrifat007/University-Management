@@ -1,0 +1,75 @@
+﻿@using System.Drawing
+@model UniversityManagementSystemMVC.Models.Department
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    string msg = ViewBag.message;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SaveDepartment</title>
+    
+</head>
+    <body>
+        <div style="background: #F7F9F9 " >
+            @using (Html.BeginForm())
+            {
+                <table width="95%" align="center" style="margin-top: 150px">
+                    <tr>
+                        <td>
+                            <fieldset>
+                                <legend>
+                                    @Html.Label("Save Department", new { @style = "font-size:x-large;font-weight: bold"})
+                                </legend>
+
+                                <table style="margin-top: 30px" align="center">
+
+                                    <tr>
+                                        <td>
+                                            @Html.Label("Code", new { @style = "font-size:large;font-weight: bold" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.Code)<br />
+                                            @Html.ValidationMessageFor(model => model.Code, "", new { @style = "color:red" })
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            @Html.Label("Name", new { @style = "font-size:large;font-weight: bold" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.Name)<br />
+                                            @Html.ValidationMessageFor(model => model.Name, "", new { @style = "color:red" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td align="right">
+                                              <input type="submit" value="Save" />
+                                        </td>
+                                    </tr>
+
+                                </table>
+                                @msg
+                            </fieldset>
+                        </td>
+                    </tr>
+
+                </table>
+            }
+        </div>
+        <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    </body>
+    
+</html>
+
+
+
+
+
+

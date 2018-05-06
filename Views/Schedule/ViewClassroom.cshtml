@@ -1,0 +1,100 @@
+﻿@using UniversityManagementSystemMVC.Models
+@model UniversityManagementSystemMVC.Models.ViewModels.ViewAllocateClassRoom
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Department> departments = ViewBag.departmentlist;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewClassroom</title>
+</head>
+<body>
+    <div style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                @Html.Label("View Class Schedule and Room Allocation Information", new { @style = "font-size:x-large;font-weight: bold" })
+                        </legend>
+
+                        <table align="center" style="margin-bottom: 20px;margin-top: 30px">
+                            <tr>
+                                <td>
+                                    @Html.Label("Department")
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(departments, "Id", "Name"), "---Select Department---", new { id = "departmentId" })
+                                </td>
+                            </tr>
+                            <table align="center" border="1px" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Course Code</th>
+                                        <th>Name</th>
+                                        <th>Schedule Info</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scheduleInformation"></tbody>
+
+                            </table>
+
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#departmentId").change(function () {
+                var deptId = $("#departmentId").val();
+
+                $('#scheduleInformation').empty();
+                var json = { departmentId: deptId };
+                var previousValue = '';
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetSchedule", "Schedule")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        if (value.Status == '' || value.Status=='False') {
+                            value.RoomNo = "Not Scheduled Yet";
+                            $("#scheduleInformation").append('<tr>' +
+                                '<td>' + value.CourseCode + '</td>' +
+                                '<td>' + value.CourseName + '</td>' +
+                                '<td>' + value.RoomNo + '</td></tr>');
+                        }
+                        else {
+                            if (previousValue != value.CourseCode) {
+                                $("#scheduleInformation").append('<tr>' +
+                                    '<td>' + value.CourseCode + '</td>' +
+                                    '<td>' + value.CourseName + '</td>' +
+                                    '<td>R. No : ' + value.RoomNo + ', ' + value.Day + ', ' + value.FromTime + " - " + value.ToTime);
+                            } else {
+                                $("#scheduleInformation td:eq(2)").append('<br/>R. No : ' + value.RoomNo + ', ' + value.Day + ', ' + value.FromTime + " - " + value.ToTime);
+                            }
+                            previousValue = value.CourseCode;
+                        }
+                    });
+                }
+            });
+           });
+            });
+    </script>
+
+
+
+</body>
+</html>

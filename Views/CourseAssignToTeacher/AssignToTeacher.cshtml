@@ -1,0 +1,208 @@
+﻿@using Org.BouncyCastle.Crypto.Tls
+@using UniversityManagementSystemMVC.Controllers
+@using UniversityManagementSystemMVC.Models
+@model UniversityManagementSystemMVC.Models.CourseAssignToTeacher
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<Department> departments = ViewBag.departments;
+    string msg = ViewBag.message;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AssignToTeacher</title>
+</head>
+<body>
+    <div align="center" style="background: aliceblue">
+        @using (Html.BeginForm())
+        {
+            <table width="95%" align="center" style="margin-top: 150px">
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                @Html.Label("Course Assign To Teacher", new { @style = "font-size:x-large;font-weight: bold" })
+                            </legend>
+                            <table style="margin-top: 30px" align="center">
+                                <tr>
+                                    <td>@Html.Label("Department", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(d => d.DepartmentId, new SelectList(departments, "Id", "Name"), "-----Select Department-----", new { @style = "width: 173px", id = "departmentId" })<br />
+                                        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td>@Html.Label("Teacher", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(d => d.TeacherId, new SelectList(string.Empty, "Id", "Name"), new { @style = "width: 173px", id = "teacherid" })<br />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("CreditToBeTaken", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(m => m.CreditTobeTaken, new { id = "credittobetaken", @readonly = true })</td>
+
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("RemainingCredit", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(r => r.RemainingCredit, new { id = "remainingcredit", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("CourseCode", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>
+                                        @Html.DropDownListFor(c => c.CourseId, new SelectList(string.Empty, "Id", "Name"), new { @style = "width: 173px", id = "courseid" })<br />
+                                        @Html.ValidationMessageFor(model => model.CourseCode, "", new { @style = "color:red" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Name", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(a => a.CourseName, new { id = "coursename", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Credit", new { @style = "font-size:large;font-weight: bold" })</td>
+                                    <td>@Html.TextBoxFor(a => a.CourseCredit, new { id = "credit", @readonly = true })</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="right">
+                                        <input type="button" value="Home" onclick="window.location.href = '@Url.Action("Home", "Home")'" />
+                                        <input type="submit" value="Save" id="submitid" />
+                                    </td>
+                                </tr>
+
+                            </table>
+                            @msg
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.0.js"></script>
+    <script src="~/Scripts/jquery-3.1.0.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document)
+        .ready(function() {
+            $("#departmentId")
+                .change(function() {
+                    var deptId = $("#departmentId").val();
+                    $("#teacherid").empty();
+                    $("#courseid").empty();
+                    $("#remainingcredit").empty();
+                    $("#credit").empty();
+                    $("#credittobetaken").val('');
+                    $("#remainingcredit").val('');
+                    $("#coursename").val('');
+                    $("#credit").val('');
+                    var json = {
+                        departmentId: deptId
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetTeachersByDepartmentId", "CourseAssignToTeacher")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(json),
+                        success: function(data) {
+                            //alert(data);
+                            $("#teacherid").append('<option>' + "-----Select Teacher-----" + '</option>');
+                            $.each(data,
+                                function(key, value) {
+                                    //alert(key);
+                                    $("#teacherid")
+                                        .append('<option value=' + value.Id + '>' + value.Name + '</option>');
+                                });
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCoursesByDepartmentId", "CourseAssignToTeacher")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(json),
+                        success: function(data) {
+
+                            //alert(data);
+                            $("#courseid").append('<option>' + "-----Select Course-----" + '</option>');
+                            $.each(data,
+                                function(key, value) {
+
+                                    //alert(key);
+                                    $("#courseid")
+                                        .append('<option value=' + value.Id + '>' + value.Code + '</option>');
+
+                                });
+                        }
+                    });
+                });
+
+
+            $("#teacherid")
+                .change(function() {
+
+                    var thrid = $("#teacherid").val();
+                    $("#credittobetaken").val('');
+                    $("#remainingcredit").val('');
+                    var json = {
+                        Tid: thrid
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetTeacherInfoById", "CourseAssignToTeacher")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(json),
+                        success: function(data) {
+                            $("#credittobetaken").val(data.CreditTobeTaken);
+                            $("#remainingcredit").val(data.RemainingCredit);
+                        }
+                    });
+
+                });
+            $("#courseid")
+                .change(function() {
+
+                    var crid = $("#courseid").val();
+                    $("#coursename").val('');
+                    $("#credit").val('');
+                    var json = {
+                        Cid: crid
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetCourseInfoById", "CourseAssignToTeacher")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(json),
+                        success: function(data) {
+                            $("#coursename").val(data.Name);
+                            $("#credit").val(data.Credit);
+                        }
+                    });
+                });
+
+
+        });
+    
+        $("#submitid")
+            .click(function () {
+                var credit = $("#credit").val();
+                c = parseFloat($("#credit").val());
+                var r = $("#remainingcredit").val();
+                
+                if ( c > r) {
+                    if (confirm("Want To Assign Extra Course?")) {
+                    return true;
+                } else {
+                    return false;
+                }
+                } 
+            });
+
+</script>
+    
+</body>
+</html>
