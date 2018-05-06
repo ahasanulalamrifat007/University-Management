@@ -1,0 +1,16 @@
+﻿body {
+    
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+.bc {
+    color: white;
+    height: 40px;
+    width: 300px;
+    background-color: blueviolet;
+    cursor:pointer;
+}

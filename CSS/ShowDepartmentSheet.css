@@ -1,0 +1,16 @@
+﻿body {
+    
+}
+
+
+
+mg.table {
+    border-collapse: collapse;width: 100%;margin-top: 20px
+}
+
+mg.table, th, td {
+    border: 1px solid black;text-align: center;font-size:large
+}
+mg.th {
+    background-color: darkgray;
+}
